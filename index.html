@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Olympia — Serveur Minecraft Bedrock</title>
+<meta name="description" content="Olympia, serveur Minecraft Bedrock. IP : play.olympiambe.com port 19132. Rejoins la communauté, vote et découvre la boutique.">
+<meta name="theme-color" content="#050b1f">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- ================================================================
+     CONFIGURATION — tout ce qui est à modifier se trouve ici
+     ================================================================ -->
+<script>
+window.OLYMPIA = {
+  name: "Olympia",
+  tagline: "KitMap PvP · Factions · Minecraft Bedrock",
+  description: "Olympia est un serveur Minecraft Bedrock KitMap orienté PvP et factions : kits, métiers, boss mythologiques, events et casino. Rejoins l'Olympe !",
+  ip: "play.olympiambe.com",
+  port: 19132,
+  discord: "https://discord.gg/APHEZTMWuE",
+  tickets: "https://discord.gg/APHEZTMWuE",   // lien vers le salon ticket si tu en as un
+  logo: "assets/logo.png",
+  tebexToken: "14uyt-7dcf3353b52bbc056cbeee486eae6c709c44fb3f", // clé PUBLIQUE uniquement
+
+  features: [
+    { icon: "swords", title: "Factions",           text: "Crée ta faction, claim ton territoire, monte de niveau et domine le Colisée." },
+    { icon: "zap",    title: "Boss mythologiques", text: "Affronte Poséidon, Warlord Kragan et les autres boss, forge le Sceptre de Zeus." },
+    { icon: "star",   title: "Events",             text: "KOTH, Totem, Nexus, Outpost, contests et Colisée de factions." },
+    { icon: "pick",   title: "Métiers",            text: "Mineur, Farmer, Bûcheron, Chasseur : 100 niveaux et des prestiges." },
+    { icon: "coins",  title: "Économie",           text: "Shop, Hôtel de Vente, spawners et outils de farm évolutifs." },
+    { icon: "dice",   title: "Casino",             text: "Machine à sous, Icare, Mines, Blackjack, Roulette et Pile ou Face." },
+    { icon: "fish",   title: "Pêche",              text: "Mini-jeu de pêche, espèces rares, trésors et améliorations." },
+    { icon: "gift",   title: "Battle Pass",        text: "Missions quotidiennes, piste gratuite et piste Premium." }
+  ],
+
+  news: [
+    { date: "2026-10-08", tag: "Annonce", title: "Lancement du site officiel",
+      text: "Le site d'Olympia est en ligne ! Retrouve la boutique, le wiki, le règlement et toutes les infos du serveur." }
+  ],
+
+  vote: {
+    sites: [
+      // ⚠ Remplace l'URL par la page de vote d'Olympia sur minecraftpocket-servers.com
+      { name: "MinecraftPocket-Servers", url: "https://minecraftpocket-servers.com/",
+        text: "Vote avec ton pseudo exact, puis fais /vote en jeu et clique sur Réclamer. Un vote toutes les 24 h." }
+    ],
+    rewards: [
+      { img: "assets/icons/key_hermes.png", name: "2 clés Hermès",   text: "À chaque vote, à réclamer avec /vote en jeu." },
+      { img: "assets/icons/key_athena.png", name: "Clé Athéna bonus", text: "Vote 7 jours d'affilée pour gagner une clé Athéna en plus." },
+      { icon: "users", name: "VoteParty",  text: "Tous les 30 votes, tous les joueurs connectés gagnent une clé Hermès, 10 émeraudes et 3 diamants." }
+    ]
+  },
+
+  wiki: [
+    { title: "Rejoindre le serveur", text: "Dans Minecraft Bedrock : <b>Jouer → Serveurs → Ajouter un serveur</b>. Adresse : <code>play.olympiambe.com</code>, port : <code>19132</code>." },
+    { title: "Bien démarrer", text: "Récupère un kit avec <code>/kit</code>, choisis tes métiers avec <code>/jobs</code>, puis crée ta faction (<code>/f create &lt;nom&gt;</code>) ou rejoins-en une (<code>/f join &lt;nom&gt;</code> après une invitation). <code>/spawn</code> ramène au spawn, <code>/settings</code> ouvre les paramètres et <code>/profil</code> ton profil. L'assistante en jeu répond à tes questions avec <code>/ia</code>." },
+    { title: "Se déplacer et communiquer", text: "<code>/tpa &lt;joueur&gt;</code> et <code>/tpaccept</code> pour la téléportation. <code>/minage</code> (ou <code>/minagevip</code> dès Semi-Deus), <code>/box</code>, <code>/kothtp</code>, <code>/outpost</code>. Messages privés : <code>/msg</code> et <code>/r</code>. Amis : <code>/amis</code>. Chat de faction : <code>/f chat</code>, d'alliance : <code>/f allychat</code>." },
+    { title: "Factions", text: "Créer : <code>/f create &lt;nom&gt;</code> (16 caractères max). Inviter : <code>/f invite</code>, exclure : <code>/f kick</code>, promouvoir : <code>/f promote</code>. Claim : <code>/f claim</code> (auto, square, circle). Le power monte de +1 par kill et +2 par heure de jeu et baisse de 2 par mort (10 max par joueur) : une faction sans power peut se faire overclaim. Home : <code>/f sethome</code> et <code>/f home</code>. Banque : <code>/f deposit</code>, <code>/f withdraw</code>. Coffre de faction : <code>/f coffre</code> (une ligne par niveau, jusqu'à 6). Relations : <code>/f ally</code>, <code>/f truce</code>, <code>/f enemy</code>." },
+    { title: "Métiers et outils de farm", text: "4 métiers jusqu'au niveau 100 : Mineur, Farmer, Bûcheron, Chasseur (<code>/jobs</code>). Au niveau max, <code>/prestige</code> donne des bonus et un badge. Pioche, hache et épée de farm s'achètent au <code>/shop</code> (50 000 $ le niveau I) et évoluent seules jusqu'au niveau V en les utilisant." },
+    { title: "Argent, shop et HDV", text: "Gagne de l'argent avec les métiers, <code>/sell</code> (tout l'inventaire), <code>/sellhand</code> et les events. Shop : <code>/shop</code>. Hôtel de Vente : <code>/hdv</code>. Classements : <code>/top</code>. Reclaim gratuit du jour : <code>/reclaimfree</code>." },
+    { title: "Points Boutique (PB)", text: "Les PB sont la monnaie de la boutique, séparée de l'argent du jeu. On les obtient sur la boutique du site, au casino ou lors de très gros events. <code>/pb</code> affiche ton solde, <code>/boutique</code> ouvre la boutique en jeu (grades, clés, Battle Pass)." },
+    { title: "Grades", text: "Du plus bas au plus haut : <b>Centurion, Consul, Imperator, Semi-Deus, Olympien</b>. Chaque grade garde les avantages des précédents. Le détail est dans la boutique du site." },
+    { title: "Boss et events", text: "<code>/boss</code> liste les boss en vie et permet de s'y téléporter. Quand Poséidon meurt, le meilleur joueur reçoit un Fragment du Sceptre de Zeus : 4 fragments autour d'un Lingot de Malachite sur un établi donnent le Sceptre. Events : <code>/event</code> et <code>/eventcalendar</code> (KOTH, Totem, Nexus, Outpost, Colisée, contests). Battle Pass : <code>/battlepass</code>, quêtes : <code>/quetes</code>." },
+    { title: "Pêche et spawners", text: "Lance ta ligne, puis clique quand le curseur est dans la zone verte (pile au centre = prise PARFAITE). <code>/peche</code> ouvre le guide, le carnet et les améliorations. Les spawners (dont Hoplite spartiate, Harpie, Minotaure) s'achètent au <code>/shop</code> et rapportent des MobCoins et du butin." },
+    { title: "Casino", text: "<code>/casino</code> : Machine à sous, Icare, Mines, La Tour, Keno, Blackjack, Baccarat, Plinko, Roulette, Hi-Lo, Dés, et <code>/coinflip</code> contre un joueur. Mise en $ ou en PB. Joue avec modération : le casino garde toujours un avantage." },
+    { title: "Kits, équipement et cosmétiques", text: "<code>/kit</code> ouvre les kits. <code>/etabli</code> pour l'équipement custom, <code>/ceinfo</code> et <code>/ceshop</code> pour les enchantements custom. <code>/cosmetic</code> pour les accessoires, capes et titres. Coffres personnels : <code>/pv</code>." },
+    { title: "Recevoir un achat de la boutique", text: "Saisis ton <b>pseudo Xbox exact</b> au moment du paiement. Tes PB sont crédités automatiquement en jeu, en général en moins de 2 minutes. Vérifie ton solde avec <code>/pb</code>." }
+  ],
+
+  rules: [
+    { title: "Jeu", items: [
+      ["Triche, client modifié, macros", "Ban 30 jours"],
+      ["Usebug / exploitation de bug", "Ban 7 jours"],
+      ["Arnaque / vol entre joueurs", "Ban 7 jours"],
+      ["Contournement de sanction", "Ban définitif"],
+      ["Pseudo ou skin inapproprié", "Ban 1 jour"]
+    ]},
+    { title: "Chat", items: [
+      ["Spam / flood", "Mute 15 min"],
+      ["Langage inapproprié", "Mute 30 min"],
+      ["Provocation", "Mute 1 h"],
+      ["Insultes", "Mute 2 h"],
+      ["Publicité", "Mute 1 jour"],
+      ["Propos discriminatoires", "Mute 3 jours"],
+      ["Harcèlement", "Mute 7 jours"]
+    ]},
+    { title: "Fautes graves", items: [
+      ["Insultes graves / menaces", "Ban 3 jours"],
+      ["Publicité pour un autre serveur", "Ban définitif"],
+      ["Les durées peuvent être augmentées en cas de récidive.", ""],
+      ["Toute contestation se fait par ticket sur le Discord, calmement.", ""]
+    ]}
+  ],
+
+  staff: [
+    { name: "Hydroo9553", role: "Fondateur", color: "#e0b44c" },
+    { name: "N2Z5323",    role: "Staff",     color: "#4f8dff" }
+  ],
+
+  // Ce qu'on achète en jeu avec les Points Boutique (/boutique)
+  pbShop: [
+    { cat: "Grades", items: [
+      { img: "assets/icons/grade_1.png", name: "Centurion", pb: 1000, perks: ["Kit VIP", "/ec, /repair, /craft", "Atouts", "2 coffres personnels"] },
+      { img: "assets/icons/grade_2.png", name: "Consul",    pb: 2000, perks: ["Avantages Centurion", "Kit MVP", "/reclaim et /reclaimprenium", "3 coffres personnels"] },
+      { img: "assets/icons/grade_3.png", name: "Imperator", pb: 3500, perks: ["Avantages Consul", "Kit Custom", "/nick", "4 coffres personnels"] },
+      { img: "assets/icons/grade_4.png", name: "Semi-Deus", pb: 5500, perks: ["Avantages Imperator", "Mine VIP (/minagevip)", "/near, /repairall", "5 coffres personnels"] },
+      { img: "assets/icons/grade_5.png", name: "Olympien",  pb: 8000, perks: ["Le grade suprême", "Kit Légendaire", "/xpbottle", "6 coffres personnels"] }
+    ]},
+    { cat: "Clés & Battle Pass", items: [
+      { img: "assets/icons/key_rare.png",        name: "Clé Rare",        pb: 50,  perks: ["5 clés : 220 PB"] },
+      { img: "assets/icons/key_epique.png",      name: "Clé Épique",      pb: 120, perks: ["5 clés : 540 PB"] },
+      { img: "assets/icons/key_legendaire.png",  name: "Clé Légendaire",  pb: 250, perks: ["5 clés : 1 100 PB"] },
+      { img: "assets/icons/key_cosmetiques.png", name: "Clé Cosmétiques", pb: 80,  perks: ["Uniquement des cosmétiques"] },
+      { img: "assets/icons/battlepass.png",      name: "Battle Pass Premium", pb: 800, perks: ["Piste Premium de la saison"] }
+    ]}
+  ]
+};
+</script>
+
+<style>
+:root{
+  --bg:#050b1f; --bg-2:#081230; --card:#0b1736; --card-2:#112250;
+  --line:rgba(120,160,255,.10); --line-gold:rgba(240,192,64,.32);
+  --gold:#f0c040; --gold-2:#ffe08a; --blue:#2f7bff; --blue-2:#7fb2ff;
+  --text:#eaf0ff; --muted:#93a3c7; --ok:#3ecf8e; --bad:#ff5d6c;
+  --radius:14px; --max:1180px;
+  --display:"Cinzel",Georgia,serif; --sans:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 var(--sans);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;
+  background-image:radial-gradient(1000px 600px at 50% -15%,rgba(47,123,255,.22),transparent 65%),radial-gradient(700px 500px at 100% 30%,rgba(47,123,255,.08),transparent 60%),radial-gradient(600px 400px at 0% 60%,rgba(240,192,64,.05),transparent 60%);background-repeat:no-repeat}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+code{background:rgba(255,255,255,.07);padding:1px 6px;border-radius:6px;font-size:.92em}
+.wrap{width:100%;max-width:var(--max);margin:0 auto;padding:0 16px}
+svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* Header */
+header.nav{position:sticky;top:0;z-index:50;background:rgba(5,11,31,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;gap:18px;height:68px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:.12em;
+  background:linear-gradient(180deg,var(--gold-2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.brand img{height:46px;width:auto}
+.brand .wm{display:flex;flex-direction:column;line-height:1}
+.links{display:flex;align-items:center;gap:2px;margin-left:12px;flex:1}
+.links a{padding:8px 12px;border-radius:9px;color:var(--muted);font-weight:500;font-size:14px;display:flex;align-items:center;gap:6px;transition:.15s}
+.links a:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.links a.on{color:var(--gold);background:rgba(224,180,76,.10)}
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+.icon-btn{position:relative;display:grid;place-items:center;width:42px;height:42px;border-radius:11px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer}
+.icon-btn:hover{border-color:var(--line-gold)}
+.badge{position:absolute;top:-6px;right:-6px;min-width:19px;height:19px;padding:0 5px;border-radius:99px;background:var(--gold);color:#1a1205;font-size:11px;font-weight:700;display:grid;place-items:center}
+.badge[data-n="0"]{display:none}
+#burger{display:none}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:11px;font-weight:600;font-size:14.5px;border:1px solid transparent;cursor:pointer;transition:.15s;font-family:var(--sans)}
+.btn-gold{background:linear-gradient(180deg,var(--gold-2),var(--gold));color:#1a1205;box-shadow:0 6px 24px -8px rgba(224,180,76,.6)}
+.btn-gold:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.btn-ghost{background:var(--card);border-color:var(--line);color:var(--text)}
+.btn-ghost:hover{border-color:var(--line-gold)}
+.btn[disabled]{opacity:.55;cursor:not-allowed;transform:none}
+.btn-sm{padding:8px 14px;font-size:13.5px;border-radius:9px}
+
+main{flex:1}
+.page{padding:48px 0 72px;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* Titles */
+.eyebrow{color:var(--gold);font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
+.h1{font-family:var(--display);font-weight:800;font-size:clamp(34px,6vw,64px);line-height:1.05;letter-spacing:.06em;margin:10px 0 14px}
+.h2{font-family:var(--display);font-weight:700;font-size:clamp(24px,3.4vw,34px);letter-spacing:.05em;margin:0 0 8px}
+.sub{color:var(--muted);max-width:620px;margin:0}
+.head{text-align:center;margin:0 auto 34px;display:flex;flex-direction:column;align-items:center}
+.gold-text{background:linear-gradient(180deg,var(--gold-2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.meander{height:14px;margin:56px 0;opacity:.35;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='14' viewBox='0 0 28 14'%3E%3Cpath d='M0 13H26V1H6V9H18V5H10' fill='none' stroke='%23e0b44c' stroke-width='1.6'/%3E%3C/svg%3E") repeat-x center}
+
+/* Hero */
+.hero{padding:72px 0 10px;text-align:center}
+.hero .h1{font-size:clamp(46px,9vw,104px);letter-spacing:.14em;margin-top:0}
+.hero .eyebrow{color:var(--blue-2)}
+.hero-logo{width:clamp(150px,22vw,220px);margin:0 auto 8px;filter:drop-shadow(0 18px 50px rgba(47,123,255,.45));animation:float 6s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-8px)}}
+@media (prefers-reduced-motion:reduce){.hero-logo{animation:none}}
+.hero .sub{margin:0 auto 28px;font-size:16.5px}
+.ip-card{display:inline-flex;align-items:stretch;border:1px solid var(--line-gold);background:var(--card);border-radius:14px;overflow:hidden;max-width:100%}
+.ip-card .ip{padding:12px 18px;text-align:left;min-width:0}
+.ip-card .ip2{border-left:1px solid var(--line-gold)}
+.ip-card .ip small{display:block;color:var(--muted);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase}
+.ip-card .ip b{font-size:17px;letter-spacing:.02em;overflow-wrap:anywhere}
+.ip-card button{border:0;border-left:1px solid var(--line-gold);background:rgba(224,180,76,.1);color:var(--gold);padding:0 18px;cursor:pointer;display:flex;align-items:center;gap:7px;font-weight:600;font-family:var(--sans)}
+.ip-card button:hover{background:rgba(224,180,76,.18)}
+.status{display:inline-flex;align-items:center;gap:8px;margin-top:18px;color:var(--muted);font-size:14px}
+.dot{width:9px;height:9px;border-radius:50%;background:#59627a}
+.dot.on{background:var(--ok);box-shadow:0 0 0 4px rgba(62,207,142,.15)}
+.dot.off{background:var(--bad)}
+.hero-cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+
+/* Grids & cards */
+.grid{display:grid;gap:16px}
+.g4{grid-template-columns:repeat(4,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;transition:.18s}
+.card:hover{border-color:var(--line-gold)}
+.card h3{margin:12px 0 6px;font-size:16.5px}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.ico{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:rgba(47,123,255,.14);color:var(--blue-2)}
+.ico img{width:30px;height:30px;image-rendering:pixelated}
+.ico.big{width:64px;height:64px;border-radius:14px}.ico.big img{width:44px;height:44px}
+.ico svg.i{width:20px;height:20px}
+.steps{counter-reset:s}
+.step{position:relative;padding-left:56px}
+.step::before{counter-increment:s;content:counter(s);position:absolute;left:22px;top:22px;width:24px;height:24px;border-radius:50%;background:var(--gold);color:#1a1205;font-weight:700;font-size:13px;display:grid;place-items:center}
+.step h3{margin-top:0}
+
+/* News */
+.news{display:flex;flex-direction:column;gap:14px;max-width:820px;margin:0 auto}
+.news-item .meta{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:13px}
+.tag{background:rgba(47,123,255,.16);color:var(--blue-2);padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600}
+.news-item h3{margin:8px 0 6px;font-size:18px}
+
+/* Vote */
+.reward{text-align:center}
+.reward .ico{margin:0 auto}
+.vote-site{text-align:center;max-width:520px;margin:0 auto;width:100%}
+.vote-site h3{margin-top:0}
+.vote-site .btn{margin-top:14px}
+
+/* Wiki / rules */
+details.acc{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+details.acc[open]{border-color:var(--line-gold)}
+details.acc summary{cursor:pointer;list-style:none;padding:16px 20px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc summary::after{content:"+";color:var(--gold);font-size:20px;font-weight:400}
+details.acc[open] summary::after{content:"–"}
+details.acc .body{padding:0 20px 18px;color:var(--muted)}
+.narrow{max-width:820px;margin:0 auto}
+.rule-list{margin:10px 0 0;padding:0;list-style:none}
+.rule-list li{position:relative;padding:8px 0 8px 22px;color:var(--muted);border-top:1px solid var(--line)}
+.rule-list li:first-child{border-top:0}
+.rule-list li::before{content:"";position:absolute;left:2px;top:17px;width:7px;height:7px;transform:rotate(45deg);background:var(--gold)}
+
+/* Staff */
+.member{text-align:center}
+.avatar{width:84px;height:84px;margin:0 auto;border-radius:16px;background:var(--card-2);border:2px solid var(--c,var(--gold));display:grid;place-items:center;font-family:var(--display);font-size:30px;font-weight:700;color:var(--c,var(--gold));overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover;image-rendering:pixelated}
+.role{display:inline-block;margin-top:8px;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700;color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent)}
+
+/* Shop */
+.shop{display:grid;grid-template-columns:230px 1fr;gap:24px;align-items:start}
+.cats{position:sticky;top:88px;display:flex;flex-direction:column;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:10px}
+.cats button{text-align:left;background:none;border:0;color:var(--muted);padding:10px 12px;border-radius:9px;cursor:pointer;font:500 14px var(--sans);display:flex;justify-content:space-between}
+.cats button:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.cats button.on{color:var(--gold);background:rgba(224,180,76,.1)}
+.cats button span{opacity:.6;font-size:12px}
+.pkgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.pkg{display:flex;flex-direction:column;padding:0;overflow:hidden}
+.pkg .img{aspect-ratio:16/10;background:linear-gradient(135deg,var(--card-2),#0b1120);display:grid;place-items:center;border-bottom:1px solid var(--line)}
+.pkg .img img{width:100%;height:100%;object-fit:contain;padding:14px}
+.pkg .img .ph{font-family:var(--display);font-size:34px;font-weight:800;color:var(--gold);opacity:.8}
+.pkg .bd{padding:16px;display:flex;flex-direction:column;flex:1}
+.pkg h3{margin:0 0 4px;font-size:16px}
+.price{font-weight:700;font-size:18px;color:var(--gold-2)}
+.price s{color:var(--muted);font-weight:500;font-size:13px;margin-left:6px}
+.pkg .act{display:flex;gap:8px;margin-top:auto;padding-top:14px}
+.pkg .act .btn{flex:1}
+.notice{border:1px solid var(--line-gold);background:rgba(224,180,76,.07);color:var(--gold-2);border-radius:12px;padding:14px 18px;margin-bottom:20px;font-size:14px}
+.notice.err{border-color:rgba(255,93,108,.35);background:rgba(255,93,108,.07);color:#ffb3ba}
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty .ico{margin:0 auto 14px;width:56px;height:56px}
+.skel{height:260px;border-radius:var(--radius);background:linear-gradient(90deg,var(--card) 0%,var(--card-2) 50%,var(--card) 100%);background-size:200% 100%;animation:sk 1.2s infinite}
+@keyframes sk{to{background-position:-200% 0}}
+
+/* PB shop */
+.pbgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.pbitem{display:flex;flex-direction:column;gap:10px}
+.pbitem .top{display:flex;align-items:center;gap:12px}
+.pbitem .top .ico{flex:none}
+.pbitem h3{margin:0;font-size:16px}
+.pbprice{display:inline-flex;align-items:center;gap:5px;font-weight:700;color:#e6a8ff;font-size:14px}
+.pbprice img{width:16px;height:16px;image-rendering:pixelated}
+.pbitem ul{margin:0;padding:0;list-style:none;font-size:13.5px;color:var(--muted)}
+.pbitem li{padding:3px 0 3px 16px;position:relative}
+.pbitem li::before{content:"";position:absolute;left:2px;top:11px;width:6px;height:6px;transform:rotate(45deg);background:var(--blue)}
+.subhead{display:flex;align-items:center;gap:10px;margin:28px 0 14px;font-weight:700;font-size:15px;color:var(--gold)}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.howpb{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:8px;counter-reset:s}
+.sanc{margin-left:auto;white-space:nowrap;font-size:12.5px;font-weight:600;color:#ffb3ba;background:rgba(255,93,108,.1);padding:2px 9px;border-radius:99px}
+.rule-list li{display:flex;gap:12px;align-items:center}
+
+/* Cart */
+.cart{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+.line{display:flex;align-items:center;gap:14px;padding:14px 0;border-top:1px solid var(--line)}
+.line:first-child{border-top:0}
+.line .th{width:56px;height:56px;border-radius:10px;background:var(--card-2);display:grid;place-items:center;flex:none;overflow:hidden;font-family:var(--display);color:var(--gold);font-weight:800}
+.line .th img{width:100%;height:100%;object-fit:contain;padding:6px}
+.line .nm{flex:1;min-width:0}
+.line .nm b{display:block}
+.line .nm small{color:var(--muted)}
+.qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.qty button{background:none;border:0;color:var(--text);width:30px;height:32px;cursor:pointer;font-size:16px}
+.qty button:hover{background:rgba(255,255,255,.05)}
+.qty span{min-width:26px;text-align:center;font-weight:600}
+.rm{background:none;border:0;color:var(--muted);cursor:pointer;padding:6px}
+.rm:hover{color:var(--bad)}
+.summary{position:sticky;top:88px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-size:13px;font-weight:600}
+.field small{color:var(--muted);font-size:12px}
+.field input{background:var(--bg-2);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:11px 13px;font:14px var(--sans);outline:none}
+.field input:focus{border-color:var(--gold)}
+.total{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);padding-top:14px;margin:6px 0 16px}
+.total b{font-size:22px;color:var(--gold-2)}
+.secure{display:flex;gap:8px;align-items:flex-start;color:var(--muted);font-size:12.5px;margin-top:12px}
+
+/* Modal + toast */
+#modal{position:fixed;inset:0;z-index:80;background:rgba(3,5,10,.7);display:none;align-items:center;justify-content:center;padding:16px}
+#modal.open{display:flex}
+#modal .box{background:var(--card);border:1px solid var(--line-gold);border-radius:16px;max-width:560px;width:100%;max-height:86vh;overflow:auto;padding:24px;position:relative}
+#modal .close{position:absolute;top:12px;right:12px}
+.desc{color:var(--muted)} .desc img{border-radius:8px;margin:8px 0}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:var(--card-2);border:1px solid var(--line-gold);color:var(--text);padding:11px 18px;border-radius:11px;font-size:14px;z-index:90;transition:.2s;max-width:calc(100% - 32px)}
+#toast.show{opacity:1;transform:translateX(-50%)}
+
+/* Footer */
+footer{border-top:1px solid var(--line);background:var(--bg-2);padding:46px 0 26px;margin-top:auto}
+.foot{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:28px}
+.foot h4{margin:0 0 12px;font-size:14px}
+.foot a{display:block;color:var(--muted);font-size:14px;padding:3px 0}
+.foot a:hover{color:var(--gold)}
+.foot p{color:var(--muted);font-size:14px;margin:12px 0 0;max-width:360px}
+.legal{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;color:#6b7489;font-size:12.5px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* Responsive */
+@media (max-width:980px){
+  .g4{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(2,1fr)} .howpb{grid-template-columns:1fr 1fr}
+  #burger{display:grid}
+  .links{position:fixed;top:68px;left:0;right:0;flex-direction:column;align-items:stretch;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 16px 16px;margin:0;display:none}
+  .links.open{display:flex}
+  .links a{padding:12px}
+  .shop,.cart{grid-template-columns:1fr}
+  .cats{position:static;flex-direction:row;overflow-x:auto}
+  .cats button{white-space:nowrap;gap:8px}
+  .summary{position:static}
+  .foot{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .g4,.g3,.g2,.howpb{grid-template-columns:1fr}
+  .rule-list li{flex-wrap:wrap}
+  .sanc{margin-left:0}
+  .foot{grid-template-columns:1fr}
+  .hero{padding-top:44px}
+  .ip-card{flex-direction:column}
+  .ip-card .ip2{border-left:0;border-top:1px solid var(--line-gold)}
+  .ip-card button{border-left:0;border-top:1px solid var(--line-gold);padding:11px;justify-content:center}
+  .line{flex-wrap:wrap;row-gap:10px}
+  .line .nm{flex-basis:calc(100% - 70px)}
+  .line .nm + *{margin-left:70px}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a href="#/" class="brand" id="brand"></a>
+    <nav class="links" id="links"></nav>
+    <div class="nav-right">
+      <a href="#/panier" class="icon-btn" aria-label="Panier" id="cartBtn"></a>
+      <button class="icon-btn" id="burger" aria-label="Menu"></button>
+    </div>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot" id="foot"></div>
+    <div class="legal"><span id="copy"></span><span>Non affilié à Mojang AB ni à Microsoft.</span></div>
+  </div>
+</footer>
+
+<div id="modal" role="dialog" aria-modal="true"><div class="box" id="modalBox"></div></div>
+<div id="toast" role="status"></div>
+
+<script>
+(function(){
+"use strict";
+const C = window.OLYMPIA;
+const API = "https://headless.tebex.io/api";
+const T = C.tebexToken;
+const $ = (s, el = document) => el.querySelector(s);
+const app = $("#app");
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
+  del(k){ try { localStorage.removeItem(k); } catch(e){} }
+};
+
+/* ---------- Icônes ---------- */
+const P = {
+  copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  cart:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>',
+  users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  menu:'<path d="M3 12h18M3 6h18M3 18h18"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  arrow:'<path d="M5 12h14M12 5l7 7-7 7"/>',
+  shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  zap:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  star:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+  gift:'<polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>',
+  chat:'<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
+  ticket:'<path d="M3 7v2a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"/>',
+  check:'<polyline points="20 6 9 17 4 12"/>',
+  trash:'<polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
+  lock:'<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  swords:'<polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" y1="19" x2="19" y2="13"/><line x1="16" y1="16" x2="20" y2="20"/><line x1="19" y1="21" x2="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" y1="14" x2="9" y2="18"/><line x1="7" y1="17" x2="4" y2="20"/><line x1="3" y1="19" x2="5" y2="21"/>',
+  pick:'<path d="M14.5 4.5c3-1.5 5.5-1 7 .5-2-.5-4 0-5.5 1"/><path d="M9.5 4.5c-3-1.5-5.5-1-7 .5 2-.5 4 0 5.5 1"/><path d="M8 6c2.5-2 5.5-2 8 0"/><line x1="12" y1="6" x2="12" y2="22"/>',
+  coins:'<circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/>',
+  dice:'<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8" cy="8" r="1.2" fill="currentColor"/><circle cx="16" cy="16" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="16" cy="8" r="1.2" fill="currentColor"/><circle cx="8" cy="16" r="1.2" fill="currentColor"/>',
+  fish:'<path d="M6.5 12c3.5-5 9-6 14-2-5 4-10.5 3-14-2z" transform="translate(0 2)"/><path d="M6.5 14 2 10v8z"/><circle cx="16" cy="13" r=".8" fill="currentColor"/>'
+};
+const ic = n => `<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${P[n] || P.star}</svg>`;
+const vis = o => o.img ? `<img src="${esc(o.img)}" alt="">` : ic(o.icon);
+
+/* ---------- Utilitaires ---------- */
+const money = (n, cur) => { try { return new Intl.NumberFormat("fr-FR",{style:"currency",currency:cur||"EUR"}).format(n||0); } catch(e){ return (n||0).toFixed(2)+" "+(cur||"€"); } };
+const fdate = d => { try { return new Date(d).toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}); } catch(e){ return d; } };
+let toastT;
+function toast(msg){ const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(()=>t.classList.remove("show"), 2600); }
+function copyIP(){
+  const txt = C.ip;
+  const done = () => toast(`IP copiée : ${C.ip} (port ${C.port})`);
+  if (navigator.clipboard) navigator.clipboard.writeText(txt).then(done, fallback); else fallback();
+  function fallback(){ const ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand("copy"); done(); }catch(e){ toast(txt); } ta.remove(); }
+}
+function clean(html){
+  const d = new DOMParser().parseFromString(html || "", "text/html");
+  d.querySelectorAll("script,style,iframe,object,embed,form,link,meta").forEach(n => n.remove());
+  d.querySelectorAll("*").forEach(el => [...el.attributes].forEach(a => {
+    if (/^on/i.test(a.name) || (/^(href|src)$/i.test(a.name) && /^\s*javascript:/i.test(a.value))) el.removeAttribute(a.name);
+  }));
+  return d.body.innerHTML;
+}
+function openModal(html){ $("#modalBox").innerHTML = `<button class="icon-btn close" data-close aria-label="Fermer">${ic("x")}</button>` + html; $("#modal").classList.add("open"); }
+function closeModal(){ $("#modal").classList.remove("open"); }
+$("#modal").addEventListener("click", e => { if (e.target.id === "modal" || e.target.closest("[data-close]")) closeModal(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+/* ---------- Statut du serveur (mcsrvstat.us) ---------- */
+let status = null;
+function paintStatus(){
+  document.querySelectorAll("[data-status]").forEach(el => {
+    if (!status) { el.innerHTML = `<span class="dot"></span>Vérification du serveur…`; return; }
+    el.innerHTML = status.online
+      ? `<span class="dot on"></span><b style="color:var(--text)">${status.players?.online ?? 0}</b>&nbsp;joueur${(status.players?.online ?? 0) > 1 ? "s" : ""} en ligne`
+      : `<span class="dot off"></span>Serveur hors ligne`;
+  });
+}
+fetch(`https://api.mcsrvstat.us/bedrock/3/${C.ip}:${C.port}`).then(r => r.json()).then(d => { status = d; paintStatus(); }).catch(() => { status = { online:false, error:true }; paintStatus(); });
+
+/* ---------- Panier (stocké localement) ---------- */
+const cart = {
+  items(){ return store.get("olympia_cart", []); },
+  save(list){ store.set("olympia_cart", list); paintBadge(); },
+  add(p){
+    const list = this.items(); const f = list.find(i => i.id === p.id);
+    if (f) { if (!p.disable_quantity) f.qty++; }
+    else list.push({ id:p.id, name:p.name, price:p.total_price, currency:p.currency, image:p.image || "", qty:1, noqty:!!p.disable_quantity });
+    this.save(list);
+  },
+  setQty(id, q){ const list = this.items().map(i => i.id === id ? {...i, qty:Math.max(1, q)} : i); this.save(list); },
+  remove(id){ this.save(this.items().filter(i => i.id !== id)); },
+  clear(){ this.save([]); },
+  count(){ return this.items().reduce((a, i) => a + i.qty, 0); },
+  total(){ return this.items().reduce((a, i) => a + i.price * i.qty, 0); }
+};
+function paintBadge(){ const n = cart.count(); $("#cartBtn").innerHTML = ic("cart") + `<span class="badge" data-n="${n}">${n}</span>`; }
+
+/* ---------- API Tebex Headless ---------- */
+async function tx(path, opts = {}){
+  const init = { method: opts.method || "GET", headers: { "Accept":"application/json" } };
+  if (opts.body) { init.headers["Content-Type"] = "application/json"; init.body = JSON.stringify(opts.body); }
+  const r = await fetch(API + path, init);
+  let data = null; try { data = await r.json(); } catch(e){}
+  if (!r.ok) throw new Error((data && (data.detail || data.message || data.title)) || `Erreur Tebex (${r.status})`);
+  return data;
+}
+let catalog = null;
+async function loadCatalog(){
+  if (catalog) return catalog;
+  const [acc, cats] = await Promise.all([ tx(`/accounts/${T}`), tx(`/accounts/${T}/categories?includePackages=1`) ]);
+  const categories = (cats.data || []).filter(c => !c.dynamic).sort((a, b) => (a.order||0) - (b.order||0));
+  categories.forEach(c => (c.packages || []).sort((a, b) => (a.order||0) - (b.order||0)));
+  catalog = { account: acc.data || {}, categories };
+  return catalog;
+}
+
+/* ---------- Routage ---------- */
+const ROUTES = [
+  { path:"",           label:"Accueil",    render: home },
+  { path:"actualites", label:"Actualités", render: newsPage },
+  { path:"vote",       label:"Vote",       render: votePage },
+  { path:"wiki",       label:"Wiki",       render: wikiPage },
+  { path:"reglement",  label:"Règlement",  render: rulesPage },
+  { path:"staff",      label:"Staff",      render: staffPage },
+  { path:"boutique",   label:"Boutique",   render: shopPage }
+];
+const HIDDEN = { panier: cartPage, merci: thanksPage };
+
+function parseHash(){
+  const h = location.hash.replace(/^#\/?/, "");
+  const [p, q] = h.split("?");
+  return { path: (p || "").replace(/\/$/, ""), params: new URLSearchParams(q || "") };
+}
+
+function layout(){
+  $("#brand").innerHTML = (C.logo ? `<img src="${esc(C.logo)}" alt="">` : "") + `<span>${esc(C.name.toUpperCase())}</span>`;
+  $("#links").innerHTML = ROUTES.map(r => `<a href="#/${r.path}" data-path="${r.path}">${esc(r.label)}</a>`).join("")
+    + `<a href="${esc(C.tickets || C.discord)}" target="_blank" rel="noopener">${ic("ticket")}Tickets</a>`;
+  $("#burger").innerHTML = ic("menu");
+  $("#burger").onclick = () => $("#links").classList.toggle("open");
+  $("#links").addEventListener("click", e => { if (e.target.closest("a")) $("#links").classList.remove("open"); });
+  paintBadge();
+  $("#foot").innerHTML = `
+    <div><a href="#/" class="brand" style="display:inline-flex">${C.logo ? `<img src="${esc(C.logo)}" alt="">` : ""}<span>${esc(C.name.toUpperCase())}</span></a>
+      <p>${esc(C.description)}</p>
+      <div class="ip-card" style="margin-top:16px"><div class="ip"><small>IP · Port</small><b>${esc(C.ip)} · ${C.port}</b></div><button data-copy>${ic("copy")}</button></div></div>
+    <div><h4>Navigation</h4>${ROUTES.slice(0,4).map(r => `<a href="#/${r.path}">${esc(r.label)}</a>`).join("")}</div>
+    <div><h4>Serveur</h4><a href="#/reglement">Règlement</a><a href="#/staff">Staff</a><a href="#/boutique">Boutique</a></div>
+    <div><h4>Communauté</h4><a href="${esc(C.discord)}" target="_blank" rel="noopener">Discord</a><a href="${esc(C.tickets || C.discord)}" target="_blank" rel="noopener">Support / tickets</a><a href="#/vote">Voter</a></div>`;
+  $("#copy").textContent = `© ${new Date().getFullYear()} ${C.name}. Tous droits réservés.`;
+  document.addEventListener("click", e => { if (e.target.closest("[data-copy]")) copyIP(); });
+}
+
+function route(){
+  const { path, params } = parseHash();
+  const r = ROUTES.find(x => x.path === path);
+  const fn = r ? r.render : (HIDDEN[path] || home);
+  document.querySelectorAll("#links a[data-path]").forEach(a => a.classList.toggle("on", a.dataset.path === (r ? r.path : (path === "panier" ? "boutique" : ""))));
+  document.title = (r && r.path ? r.label + " — " : (path === "panier" ? "Panier — " : "")) + C.name;
+  window.scrollTo(0, 0);
+  fn(params);
+  paintStatus();
+}
+
+/* ---------- Pages ---------- */
+function home(){
+  const join = `minecraft://?addExternalServer=${encodeURIComponent(C.name)}|${C.ip}:${C.port}`;
+  app.innerHTML = `<div class="page" style="padding-top:0">
+  <section class="hero"><div class="wrap">
+    ${C.logo ? `<img class="hero-logo" src="${esc(C.logo)}" alt="Logo ${esc(C.name)}">` : ""}<div class="eyebrow">${esc(C.tagline)}</div><h1 class="h1 gold-text">${esc(C.name.toUpperCase())}</h1>
+    <p class="sub">${esc(C.description)}</p>
+    <div class="ip-card"><div class="ip"><small>Adresse du serveur</small><b>${esc(C.ip)}</b></div><div class="ip ip2"><small>Port</small><b>${C.port}</b></div><button data-copy>${ic("copy")}Copier</button></div>
+    <div><span class="status" data-status></span></div>
+    <div class="hero-cta">
+      <a class="btn btn-gold" href="${esc(join)}">${ic("plus")}Ajouter le serveur</a>
+      <a class="btn btn-ghost" href="${esc(C.discord)}" target="_blank" rel="noopener">${ic("chat")}Rejoindre le Discord</a>
+      <a class="btn btn-ghost" href="#/boutique">${ic("cart")}Boutique</a>
+    </div>
+  </div></section>
+  <div class="wrap"><div class="meander"></div>
+    <div class="head"><div class="eyebrow">Au programme</div><h2 class="h2">Bienvenue sur l'Olympe</h2><p class="sub">Un KitMap complet, pensé pour le PvP et les factions.</p></div>
+    <div class="grid g4">${C.features.map(f => `<div class="card"><div class="ico">${vis(f)}</div><h3>${esc(f.title)}</h3><p>${esc(f.text)}</p></div>`).join("")}</div>
+    <div class="meander"></div>
+    <div class="head"><div class="eyebrow">Comment jouer</div><h2 class="h2">Rejoindre en 3 étapes</h2></div>
+    <div class="grid g3 steps">
+      <div class="card step"><h3>Ouvre Minecraft Bedrock</h3><p>Sur mobile, console, Windows : va dans <b>Jouer</b> puis l'onglet <b>Serveurs</b>.</p></div>
+      <div class="card step"><h3>Ajoute le serveur</h3><p>Adresse <code>${esc(C.ip)}</code> et port <code>${C.port}</code>.</p></div>
+      <div class="card step"><h3>Rejoins le Discord</h3><p>Annonces, événements, support : tout se passe sur le Discord.</p></div>
+    </div>
+    ${C.news.length ? `<div class="meander"></div>
+    <div class="head"><div class="eyebrow">Actualités</div><h2 class="h2">Dernières nouvelles</h2></div>
+    <div class="news">${C.news.slice(0,3).map(newsItem).join("")}</div>
+    <div style="text-align:center;margin-top:20px"><a class="btn btn-ghost" href="#/actualites">Toutes les actualités ${ic("arrow")}</a></div>` : ""}
+  </div></div>`;
+}
+
+const newsItem = n => `<article class="card news-item"><div class="meta"><span class="tag">${esc(n.tag||"Info")}</span><span>${esc(fdate(n.date))}</span></div><h3>${esc(n.title)}</h3><p>${esc(n.text)}</p></article>`;
+function pageHead(eyebrow, title, sub){ return `<div class="head"><div class="eyebrow">${esc(eyebrow)}</div><h1 class="h2" style="font-size:clamp(30px,5vw,46px)">${esc(title)}</h1>${sub ? `<p class="sub">${sub}</p>` : ""}</div>`; }
+
+function newsPage(){
+  app.innerHTML = `<div class="page"><div class="wrap">${pageHead("Actualités","Les nouvelles d'"+C.name,"Mises à jour, événements et annonces du serveur.")}
+    <div class="news">${C.news.length ? C.news.map(newsItem).join("") : `<div class="empty">Aucune actualité pour le moment.</div>`}</div></div></div>`;
+}
+
+function votePage(){
+  const V = C.vote;
+  app.innerHTML = `<div class="page"><div class="wrap">
+    ${pageHead("Vote","Récompenses de vote","Chaque vote te rapporte des récompenses en jeu.")}
+    <div class="grid ${V.rewards.length >= 3 ? "g3" : "g2"} narrow">${V.rewards.map(r => `<div class="card reward"><div class="ico big">${vis(r)}</div><h3>${esc(r.name)}</h3><p>${esc(r.text)}</p></div>`).join("")}</div>
+    <div class="meander"></div>
+    ${pageHead("Voter","Vote chaque jour","Soutiens le serveur et gagne tes récompenses. Elles arrivent automatiquement en jeu.")}
+    <div class="grid" style="justify-items:center">${V.sites.map(s => `<div class="card vote-site"><h3>${esc(s.name)}</h3><p>${esc(s.text)}</p>
+      <a class="btn btn-gold" href="${esc(s.url)}" target="_blank" rel="noopener">Voter maintenant ${ic("arrow")}</a></div>`).join("")}</div>
+  </div></div>`;
+}
+
+function wikiPage(){
+  app.innerHTML = `<div class="page"><div class="wrap narrow">${pageHead("Wiki","Le guide d'"+C.name,"Tout ce qu'il faut savoir pour bien démarrer.")}
+    ${C.wiki.map((w, i) => `<details class="acc" ${i===0?"open":""}><summary>${esc(w.title)}</summary><div class="body">${w.text}</div></details>`).join("")}
+  </div></div>`;
+}
+
+function rulesPage(){
+  app.innerHTML = `<div class="page"><div class="wrap narrow">${pageHead("Règlement","Les règles du serveur","Respect, fair-play et bonne ambiance. Voici les sanctions appliquées par le staff.")}
+    <div class="grid">${C.rules.map(s => `<div class="card"><h3 style="margin-top:0" class="gold-text">${esc(s.title)}</h3><ul class="rule-list">${s.items.map(i => Array.isArray(i) ? `<li><span>${esc(i[0])}</span>${i[1] ? `<span class="sanc">${esc(i[1])}</span>` : ""}</li>` : `<li>${esc(i)}</li>`).join("")}</ul></div>`).join("")}</div>
+  </div></div>`;
+}
+
+function staffPage(){
+  app.innerHTML = `<div class="page"><div class="wrap">${pageHead("Staff","L'équipe d'"+C.name,"Une question ? Ouvre un ticket sur le Discord.")}
+    <div class="grid g4">${C.staff.map(m => {
+      const head = esc((m.name||"?")[0].toUpperCase());
+      return `<div class="card member" style="--c:${esc(m.color||"#e0b44c")}"><div class="avatar">${head}</div><h3>${esc(m.name)}</h3><span class="role">${esc(m.role)}</span></div>`;
+    }).join("")}</div>
+    <div style="text-align:center;margin-top:28px"><a class="btn btn-ghost" href="${esc(C.tickets||C.discord)}" target="_blank" rel="noopener">${ic("ticket")}Ouvrir un ticket</a></div>
+  </div></div>`;
+}
+
+/* ---------- Boutique ---------- */
+let currentCat = "all";
+async function shopPage(){
+  app.innerHTML = `<div class="page"><div class="wrap">${pageHead("Boutique","La boutique d'"+C.name,"Achète des Points Boutique (PB) et dépense-les en jeu. Paiement sécurisé par Tebex, livraison automatique.")}
+    <div class="howpb">
+      <div class="card step" style="padding-left:56px"><h3>Achète des PB</h3><p>Choisis un pack ci-dessous et paie en toute sécurité avec Tebex.</p></div>
+      <div class="card step" style="padding-left:56px"><h3>Reçois-les en jeu</h3><p>Tes PB arrivent sur ton compte automatiquement. Vérifie avec <code>/pb</code>.</p></div>
+      <div class="card step" style="padding-left:56px"><h3>Dépense-les</h3><p>Ouvre <code>/boutique</code> en jeu : grades, clés, Battle Pass.</p></div>
+    </div>
+    <div class="subhead">Packs disponibles</div>
+    <div id="shop"><div class="pkgs">${'<div class="skel"></div>'.repeat(4)}</div></div>
+    ${pbCatalogHTML()}
+  </div></div>`;
+  const box = $("#shop");
+  let cat;
+  try { cat = await loadCatalog(); }
+  catch(e){ box.innerHTML = `<div class="notice err">Impossible de charger la boutique pour le moment (${esc(e.message)}). Réessaie dans quelques minutes.</div>`; return; }
+  if (!$("#shop")) return; // l'utilisateur a changé de page
+  const cats = cat.categories.filter(c => (c.packages||[]).length);
+  const all = cats.flatMap(c => c.packages);
+  const warn = cat.account.disabled ? `<div class="notice">La boutique est en cours de préparation : les achats seront bientôt disponibles.</div>` : "";
+  if (!all.length) { box.innerHTML = warn + `<div class="card empty"><div class="ico">${ic("gift")}</div><h3 style="color:var(--text)">Les packs de PB arrivent bientôt</h3><p>La boutique en ligne ouvre très prochainement. En attendant, découvre ce que tu pourras obtenir ci-dessous.</p></div>`; return; }
+  if (currentCat !== "all" && !cats.some(c => String(c.id) === currentCat)) currentCat = "all";
+  const list = currentCat === "all" ? all : cats.find(c => String(c.id) === currentCat).packages;
+  const activeCat = cats.find(c => String(c.id) === currentCat);
+  box.innerHTML = warn + `<div class="shop">
+    <aside class="cats"><button data-cat="all" class="${currentCat==="all"?"on":""}">Tout <span>${all.length}</span></button>
+      ${cats.map(c => `<button data-cat="${c.id}" class="${String(c.id)===currentCat?"on":""}">${esc(c.name)} <span>${c.packages.length}</span></button>`).join("")}</aside>
+    <div>${activeCat && activeCat.description ? `<div class="card desc" style="margin-bottom:16px">${clean(activeCat.description)}</div>` : ""}
+      <div class="pkgs">${list.map(pkgCard).join("")}</div></div></div>`;
+  box.querySelectorAll("[data-cat]").forEach(b => b.onclick = () => { currentCat = b.dataset.cat; shopPage(); });
+  box.querySelectorAll("[data-add]").forEach(b => b.onclick = () => { const p = all.find(x => String(x.id) === b.dataset.add); cart.add(p); toast(`« ${p.name} » ajouté au panier`); });
+  box.querySelectorAll("[data-info]").forEach(b => b.onclick = () => {
+    const p = all.find(x => String(x.id) === b.dataset.info);
+    openModal(`<h2 class="h2" style="font-size:24px;padding-right:40px">${esc(p.name)}</h2><div class="price" style="margin-bottom:12px">${money(p.total_price,p.currency)}</div>
+      ${p.image ? `<img src="${esc(p.image)}" alt="" style="max-height:200px;margin:0 auto 14px">` : ""}
+      <div class="desc">${clean(p.description) || "Aucune description."}</div>
+      <button class="btn btn-gold" style="width:100%;margin-top:18px" data-addm="${p.id}">${ic("cart")}Ajouter au panier</button>`);
+    $("[data-addm]").onclick = () => { cart.add(p); closeModal(); toast(`« ${p.name} » ajouté au panier`); };
+  });
+}
+function pbCatalogHTML(){
+  if (!C.pbShop || !C.pbShop.length) return "";
+  const gem = `<img src="assets/icons/pb_gem.png" alt="">`;
+  return `<div class="meander" style="margin:48px 0 36px"></div>
+    <div class="head" style="margin-bottom:10px"><div class="eyebrow">En jeu avec /boutique</div><h2 class="h2">Ce que tu peux obtenir avec tes PB</h2><p class="sub">Les grades sont définitifs et cumulent les avantages des grades précédents.</p></div>
+    ${C.pbShop.map(g => `<div class="subhead">${esc(g.cat)}</div><div class="pbgrid">${g.items.map(it => `<div class="card pbitem">
+      <div class="top"><div class="ico big">${vis(it)}</div><div><h3>${esc(it.name)}</h3><span class="pbprice">${gem}${it.pb.toLocaleString("fr-FR")} PB</span></div></div>
+      <ul>${it.perks.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>`).join("")}</div>`).join("")}`;
+}
+function pkgCard(p){
+  const was = p.discount > 0 ? `<s>${money(p.total_price + p.discount, p.currency)}</s>` : "";
+  return `<div class="card pkg">
+    <div class="img">${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy">` : `<img src="assets/icons/pb_gem.png" alt="" style="image-rendering:pixelated;width:72px;height:72px;padding:0">`}</div>
+    <div class="bd"><h3>${esc(p.name)}</h3><div class="price">${money(p.total_price, p.currency)}${was}</div>
+      <div class="act"><button class="btn btn-ghost btn-sm" data-info="${p.id}">Détails</button><button class="btn btn-gold btn-sm" data-add="${p.id}">${ic("cart")}Ajouter</button></div></div></div>`;
+}
+
+/* ---------- Panier & paiement ---------- */
+function cartPage(params){
+  const resume = params.get("resume");
+  if (resume) { app.innerHTML = `<div class="page"><div class="wrap narrow"><div class="card empty"><div class="ico">${ic("lock")}</div><h3 style="color:var(--text)">Préparation du paiement…</h3><p id="ck">Redirection vers la page de paiement sécurisée.</p></div></div></div>`;
+    finalize(resume).catch(e => { app.innerHTML = ""; cartPage(new URLSearchParams()); showErr(e); }); return; }
+  const items = cart.items();
+  if (!items.length) {
+    app.innerHTML = `<div class="page"><div class="wrap narrow">${pageHead("Panier","Ton panier")}
+      <div class="card empty"><div class="ico">${ic("cart")}</div><h3 style="color:var(--text)">Ton panier est vide</h3><p>Va faire un tour à la boutique !</p><a class="btn btn-gold" style="margin-top:16px" href="#/boutique">Voir la boutique</a></div></div></div>`;
+    return;
+  }
+  const cur = items[0].currency;
+  app.innerHTML = `<div class="page"><div class="wrap">${pageHead("Panier","Ton panier")}
+    <div id="err"></div>
+    <div class="cart">
+      <div class="card">${items.map(i => `<div class="line">
+        <div class="th">${i.image ? `<img src="${esc(i.image)}" alt="">` : esc(i.name[0])}</div>
+        <div class="nm"><b>${esc(i.name)}</b><small>${money(i.price, i.currency)} l'unité</small></div>
+        ${i.noqty ? "" : `<div class="qty"><button data-q="${i.id}" data-d="-1" aria-label="Moins">−</button><span>${i.qty}</span><button data-q="${i.id}" data-d="1" aria-label="Plus">+</button></div>`}
+        <b style="min-width:80px;text-align:right">${money(i.price*i.qty, i.currency)}</b>
+        <button class="rm" data-rm="${i.id}" aria-label="Retirer">${ic("trash")}</button></div>`).join("")}</div>
+      <div class="card summary">
+        <div class="field"><label for="user">Pseudo Xbox (Gamertag)</label><input id="user" autocomplete="off" placeholder="Ton pseudo exact en jeu" value="${esc(store.get("olympia_user",""))}"><small>L'achat sera livré sur ce compte. Vérifie bien l'orthographe.</small></div>
+        <div class="field"><label for="coupon">Code promo <span style="color:var(--muted);font-weight:400">(facultatif)</span></label><input id="coupon" autocomplete="off"></div>
+        <div class="field"><label for="creator">Code créateur <span style="color:var(--muted);font-weight:400">(facultatif)</span></label><input id="creator" autocomplete="off"></div>
+        <div class="total"><span>Total estimé</span><b>${money(cart.total(), cur)}</b></div>
+        <button class="btn btn-gold" style="width:100%" id="pay">${ic("lock")}Payer</button>
+        <div class="secure">${ic("shield")}<span>Paiement sécurisé par Tebex. Les taxes éventuelles sont calculées à l'étape suivante. Tes PB sont crédités automatiquement en jeu.</span></div>
+      </div>
+    </div></div></div>`;
+  app.querySelectorAll("[data-q]").forEach(b => b.onclick = () => { const it = cart.items().find(x => String(x.id) === b.dataset.q); cart.setQty(it.id, it.qty + Number(b.dataset.d)); cartPage(new URLSearchParams()); });
+  app.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { cart.remove(Number(b.dataset.rm)); cartPage(new URLSearchParams()); });
+  $("#pay").onclick = checkout;
+}
+function showErr(e){ const el = $("#err"); if (el) el.innerHTML = `<div class="notice err">${esc(e.message || e)}</div>`; else toast(e.message || String(e)); }
+
+async function checkout(){
+  const user = ($("#user").value || "").trim();
+  if (user.length < 2) { showErr("Indique ton pseudo Xbox pour recevoir ton achat."); $("#user").focus(); return; }
+  store.set("olympia_user", user);
+  store.set("olympia_codes", { coupon: $("#coupon").value.trim(), creator: $("#creator").value.trim() });
+  const btn = $("#pay"); btn.disabled = true; btn.innerHTML = "Préparation…";
+  try {
+    const base = location.href.split("#")[0];
+    const b = await tx(`/accounts/${T}/baskets`, { method:"POST", body:{
+      complete_url: base + "#/merci", cancel_url: base + "#/panier",
+      complete_auto_redirect: true, username: user } });
+    const ident = b.data.ident;
+    if (!b.data.username) {
+      const links = await tx(`/accounts/${T}/baskets/${ident}/auth?returnUrl=${encodeURIComponent(base + "#/panier?resume=" + ident)}`);
+      const arr = Array.isArray(links) ? links : (links && links.data) || [];
+      if (arr[0] && arr[0].url) { location.href = arr[0].url; return; }
+    }
+    await finalize(ident);
+  } catch(e) { showErr(e); btn.disabled = false; btn.innerHTML = ic("lock") + "Payer"; }
+}
+
+async function finalize(ident){
+  const items = cart.items();
+  if (!items.length) throw new Error("Ton panier est vide.");
+  for (const it of items) await tx(`/baskets/${ident}/packages`, { method:"POST", body:{ package_id: String(it.id), quantity: it.qty } });
+  const codes = store.get("olympia_codes", {});
+  if (codes.coupon) { try { await tx(`/accounts/${T}/baskets/${ident}/coupons`, { method:"POST", body:{ coupon_code: codes.coupon } }); } catch(e){ toast("Code promo invalide, il a été ignoré."); } }
+  if (codes.creator) { try { await tx(`/accounts/${T}/baskets/${ident}/creator-codes`, { method:"POST", body:{ creator_code: codes.creator } }); } catch(e){ toast("Code créateur invalide, il a été ignoré."); } }
+  const bk = await tx(`/accounts/${T}/baskets/${ident}`);
+  const url = bk.data && bk.data.links && bk.data.links.checkout;
+  if (!url) throw new Error("Tebex n'a pas renvoyé de lien de paiement. Réessaie dans un instant.");
+  location.href = url;
+}
+
+function thanksPage(){
+  cart.clear(); store.del("olympia_codes");
+  app.innerHTML = `<div class="page"><div class="wrap narrow"><div class="card empty">
+    <div class="ico" style="background:rgba(62,207,142,.12);color:var(--ok)">${ic("check")}</div>
+    <h2 class="h2" style="color:var(--text)">Merci pour ton soutien !</h2>
+    <p>Ton paiement a bien été pris en compte. Tes Points Boutique arrivent automatiquement en jeu (vérifie avec <code>/pb</code>), puis dépense-les avec <code>/boutique</code>.</p>
+    <p style="margin-top:8px">Un souci ? Ouvre un ticket sur le Discord avec ton pseudo et ta preuve d'achat.</p>
+    <div class="hero-cta"><a class="btn btn-gold" href="#/">Retour à l'accueil</a><a class="btn btn-ghost" href="${esc(C.tickets||C.discord)}" target="_blank" rel="noopener">${ic("ticket")}Support</a></div>
+  </div></div></div>`;
+}
+
+layout();
+window.addEventListener("hashchange", route);
+route();
+})();
+</script>
+</body>
+</html>
